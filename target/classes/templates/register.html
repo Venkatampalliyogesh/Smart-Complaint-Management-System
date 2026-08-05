@@ -1,0 +1,631 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Register - Smart Complaint Management System</title>
+    
+    <!-- Google Fonts - Poppins -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    
+    <!-- Bootstrap 5 CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+    
+    <!-- Bootstrap Icons -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.1/font/bootstrap-icons.css">
+    
+    <!-- Modern CSS Framework -->
+    <link rel="stylesheet" href="/css/modern.css">
+    
+    <style>
+        /* Register Page Specific Styles with Glassmorphism */
+        .register-container {
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: linear-gradient(135deg, #1E293B 0%, #0F172A 50%, #1E40AF 100%);
+            padding: 2rem;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        /* Animated background elements */
+        .register-container::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            left: -50%;
+            width: 200%;
+            height: 200%;
+            background: radial-gradient(circle, rgba(37, 99, 235, 0.3) 0%, transparent 50%);
+            animation: float 20s ease-in-out infinite;
+        }
+        
+        .register-container::after {
+            content: '';
+            position: absolute;
+            bottom: -30%;
+            right: -30%;
+            width: 150%;
+            height: 150%;
+            background: radial-gradient(circle, rgba(8, 145, 178, 0.2) 0%, transparent 50%);
+            animation: float 15s ease-in-out infinite reverse;
+        }
+        
+        @keyframes float {
+            0%, 100% { transform: translate(0, 0) rotate(0deg); }
+            50% { transform: translate(30px, -30px) rotate(5deg); }
+        }
+        
+        .register-card {
+            background: rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            border-radius: 1.5rem;
+            box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.25);
+            max-width: 550px;
+            width: 100%;
+            overflow: hidden;
+            animation: slideUp 0.6s ease-out;
+            position: relative;
+            z-index: 1;
+        }
+        
+        .register-header {
+            background: rgba(255, 255, 255, 0.05);
+            backdrop-filter: blur(10px);
+            padding: 3rem;
+            text-align: center;
+            color: white;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+        }
+        
+        .register-logo {
+            font-size: 4rem;
+            margin-bottom: 1rem;
+            animation: fadeIn 0.8s ease-in;
+            background: linear-gradient(135deg, #60A5FA 0%, #34D399 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+        
+        .register-title {
+            font-size: 1.75rem;
+            font-weight: 700;
+            margin-bottom: 0.5rem;
+            text-shadow: 0 2px 10px rgba(0, 0, 0, 0.3);
+        }
+        
+        .register-subtitle {
+            font-size: 0.95rem;
+            opacity: 0.9;
+            font-weight: 300;
+        }
+        
+        .register-body {
+            padding: 3rem;
+            background: rgba(255, 255, 255, 0.95);
+        }
+        
+        .register-form .form-group {
+            margin-bottom: 1.5rem;
+        }
+        
+        .register-form .form-label {
+            font-weight: 600;
+            color: #1E293B;
+            margin-bottom: 0.5rem;
+            display: block;
+        }
+        
+        .register-form .input-group {
+            position: relative;
+        }
+        
+        .register-form .input-group-text {
+            background: #F8FAFC;
+            border: 2px solid #E2E8F0;
+            border-right: none;
+            padding: 1rem;
+            color: #64748B;
+            transition: all 0.3s ease;
+        }
+        
+        .register-form .form-control {
+            padding: 1rem;
+            border: 2px solid #E2E8F0;
+            border-radius: 0.5rem;
+            font-size: 1rem;
+            transition: all 0.3s ease;
+            background: #F8FAFC;
+        }
+        
+        .register-form .form-control:focus {
+            border-color: #2563EB;
+            box-shadow: 0 0 0 4px rgba(37, 99, 235, 0.1);
+            background: white;
+        }
+        
+        .register-form .input-group:focus-within .input-group-text {
+            border-color: #2563EB;
+            background: white;
+        }
+        
+        .register-form .row {
+            margin: 0 -0.5rem;
+        }
+        
+        .register-form .row > div {
+            padding: 0 0.5rem;
+        }
+        
+        .register-btn {
+            width: 100%;
+            padding: 1rem;
+            background: linear-gradient(135deg, #2563EB 0%, #1E40AF 100%);
+            color: white;
+            border: none;
+            border-radius: 0.75rem;
+            font-size: 1rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 0.5rem;
+            box-shadow: 0 4px 15px rgba(37, 99, 235, 0.3);
+        }
+        
+        .register-btn:hover:not(:disabled) {
+            transform: translateY(-3px);
+            box-shadow: 0 8px 25px rgba(37, 99, 235, 0.4);
+        }
+        
+        .register-btn:active:not(:disabled) {
+            transform: translateY(-1px);
+        }
+        
+        .register-btn:disabled {
+            opacity: 0.7;
+            cursor: not-allowed;
+        }
+        
+        .register-footer {
+            padding: 2rem;
+            background: rgba(248, 250, 252, 0.95);
+            text-align: center;
+            border-top: 1px solid #E2E8F0;
+        }
+        
+        .register-footer a {
+            color: #2563EB;
+            text-decoration: none;
+            font-weight: 600;
+            transition: all 0.3s ease;
+            display: inline-flex;
+            align-items: center;
+            gap: 0.25rem;
+        }
+        
+        .register-footer a:hover {
+            color: #1E40AF;
+            transform: translateY(-2px);
+        }
+        
+        /* Password Strength Meter */
+        .password-strength-meter {
+            margin-top: 0.75rem;
+        }
+        
+        .password-strength-bar {
+            height: 4px;
+            background: #E2E8F0;
+            border-radius: 2px;
+            overflow: hidden;
+            margin-bottom: 0.5rem;
+        }
+        
+        .password-strength-fill {
+            height: 100%;
+            width: 0%;
+            transition: all 0.3s ease;
+            border-radius: 2px;
+        }
+        
+        .password-strength-fill.weak {
+            width: 33%;
+            background: #DC2626;
+        }
+        
+        .password-strength-fill.medium {
+            width: 66%;
+            background: #F59E0B;
+        }
+        
+        .password-strength-fill.strong {
+            width: 100%;
+            background: #16A34A;
+        }
+        
+        .password-strength-text {
+            font-size: 0.8rem;
+            font-weight: 500;
+            color: #64748B;
+        }
+        
+        .password-strength-text.weak {
+            color: #DC2626;
+        }
+        
+        .password-strength-text.medium {
+            color: #F59E0B;
+        }
+        
+        .password-strength-text.strong {
+            color: #16A34A;
+        }
+        
+        .password-requirements {
+            margin-top: 0.5rem;
+            font-size: 0.75rem;
+            color: #64748B;
+        }
+        
+        .password-requirements ul {
+            list-style: none;
+            padding: 0;
+            margin: 0;
+        }
+        
+        .password-requirements li {
+            padding: 0.25rem 0;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+        
+        .password-requirements li.valid {
+            color: #16A34A;
+        }
+        
+        .password-requirements li.invalid {
+            color: #DC2626;
+        }
+        
+        .back-to-landing {
+            position: absolute;
+            top: 2rem;
+            left: 2rem;
+            z-index: 10;
+        }
+        
+        .back-to-landing a {
+            color: white;
+            text-decoration: none;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            padding: 0.75rem 1.5rem;
+            background: rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(10px);
+            border-radius: 0.5rem;
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            transition: all 0.3s ease;
+        }
+        
+        .back-to-landing a:hover {
+            background: rgba(255, 255, 255, 0.2);
+            transform: translateX(-5px);
+        }
+        
+        @keyframes slideUp {
+            from {
+                opacity: 0;
+                transform: translateY(30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+        
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+        
+        @media (max-width: 768px) {
+            .register-card {
+                border-radius: 1rem;
+            }
+            
+            .register-container {
+                padding: 1rem;
+            }
+            
+            .back-to-landing {
+                top: 1rem;
+                left: 1rem;
+            }
+            
+            .register-header {
+                padding: 2rem;
+            }
+            
+            .register-body {
+                padding: 2rem;
+            }
+            
+            .register-title {
+                font-size: 1.5rem;
+            }
+        }
+        
+        @media (max-width: 576px) {
+            .register-card {
+                border-radius: 0;
+                box-shadow: none;
+            }
+            
+            .register-container {
+                padding: 0;
+                align-items: flex-start;
+            }
+            
+            .back-to-landing {
+                position: fixed;
+                top: auto;
+                bottom: 1rem;
+                left: 1rem;
+                right: 1rem;
+            }
+            
+            .back-to-landing a {
+                justify-content: center;
+            }
+            
+            .register-form .row > div {
+                padding: 0;
+                margin-bottom: 1.5rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="register-container">
+        <div class="back-to-landing">
+            <a href="landing.html">
+                <i class="bi bi-arrow-left"></i>
+                Back to Home
+            </a>
+        </div>
+        
+        <div class="register-card">
+            <div class="register-header">
+                <div class="register-logo">
+                    <i class="bi bi-person-plus"></i>
+                </div>
+                <h1 class="register-title">Create Account</h1>
+                <p class="register-subtitle">Join SCMS - Smart Complaint Management System</p>
+            </div>
+            
+            <div class="register-body">
+                <div id="alert" class="alert"></div>
+                
+                <form id="registerForm" class="register-form" novalidate>
+                    <div class="row">
+                        <div class="col-md-6">
+                            <div class="form-group">
+                                <label for="firstName" class="form-label">First Name</label>
+                                <div class="input-group">
+                                    <span class="input-group-text">
+                                        <i class="bi bi-person"></i>
+                                    </span>
+                                    <input type="text" class="form-control" id="firstName" name="firstName" 
+                                           required placeholder="John" maxlength="50" autocomplete="given-name">
+                                </div>
+                                <div class="invalid-feedback">First name is required</div>
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="form-group">
+                                <label for="lastName" class="form-label">Last Name</label>
+                                <div class="input-group">
+                                    <span class="input-group-text">
+                                        <i class="bi bi-person"></i>
+                                    </span>
+                                    <input type="text" class="form-control" id="lastName" name="lastName" 
+                                           required placeholder="Doe" maxlength="50" autocomplete="family-name">
+                                </div>
+                                <div class="invalid-feedback">Last name is required</div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="email" class="form-label">Email Address</label>
+                        <div class="input-group">
+                            <span class="input-group-text">
+                                <i class="bi bi-envelope"></i>
+                            </span>
+                            <input type="email" class="form-control" id="email" name="email" 
+                                   required placeholder="john.doe@example.com" maxlength="100" autocomplete="email">
+                        </div>
+                        <div class="invalid-feedback">Please enter a valid email address</div>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="phone" class="form-label">Phone Number (Optional)</label>
+                        <div class="input-group">
+                            <span class="input-group-text">
+                                <i class="bi bi-telephone"></i>
+                            </span>
+                            <input type="tel" class="form-control" id="phone" name="phone" 
+                                   placeholder="+1 234 567 8900" maxlength="20" autocomplete="tel">
+                        </div>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="password" class="form-label">Password</label>
+                        <div class="input-group">
+                            <span class="input-group-text">
+                                <i class="bi bi-lock"></i>
+                            </span>
+                            <input type="password" class="form-control" id="password" name="password" 
+                                   required placeholder="Min 6 characters" autocomplete="new-password">
+                        </div>
+                        <div class="password-strength-meter">
+                            <div class="password-strength-bar">
+                                <div class="password-strength-fill" id="passwordStrengthFill"></div>
+                            </div>
+                            <div class="password-strength-text" id="passwordStrengthText">Password strength</div>
+                            <div class="password-requirements">
+                                <ul>
+                                    <li id="req-length" class="invalid">
+                                        <i class="bi bi-x-circle"></i> At least 6 characters
+                                    </li>
+                                    <li id="req-uppercase" class="invalid">
+                                        <i class="bi bi-x-circle"></i> One uppercase letter
+                                    </li>
+                                    <li id="req-lowercase" class="invalid">
+                                        <i class="bi bi-x-circle"></i> One lowercase letter
+                                    </li>
+                                    <li id="req-number" class="invalid">
+                                        <i class="bi bi-x-circle"></i> One number
+                                    </li>
+                                </ul>
+                            </div>
+                        </div>
+                        <div class="invalid-feedback">Password must be at least 6 characters with letters and digits</div>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="confirmPassword" class="form-label">Confirm Password</label>
+                        <div class="input-group">
+                            <span class="input-group-text">
+                                <i class="bi bi-lock-fill"></i>
+                            </span>
+                            <input type="password" class="form-control" id="confirmPassword" name="confirmPassword" 
+                                   required placeholder="Re-enter password" autocomplete="new-password">
+                        </div>
+                        <div class="invalid-feedback">Passwords do not match</div>
+                    </div>
+                    
+                    <button type="submit" class="register-btn" id="registerButton">
+                        <span class="spinner-border spinner-border-sm d-none" id="registerSpinner"></span>
+                        <span id="registerButtonText">Create Account</span>
+                        <i class="bi bi-arrow-right"></i>
+                    </button>
+                </form>
+            </div>
+            
+            <div class="register-footer">
+                <p style="margin-bottom: 1rem; color: #64748B;">
+                    Already have an account?
+                </p>
+                <a href="/index.html" class="btn btn-outline-primary">
+                    <i class="bi bi-box-arrow-in-right me-2"></i>Sign In
+                </a>
+            </div>
+        </div>
+    </div>
+    
+    <!-- Toast Container -->
+    <div class="toast-container position-fixed top-0 end-0 p-3">
+        <div id="toast" class="toast" role="alert" aria-live="assertive" aria-atomic="true">
+            <div class="toast-header">
+                <i class="bi bi-bell me-2" id="toastIcon"></i>
+                <strong class="me-auto" id="toastTitle">Notification</strong>
+                <button type="button" class="btn-close" data-bs-dismiss="toast" aria-label="Close"></button>
+            </div>
+            <div class="toast-body" id="toastMessage"></div>
+        </div>
+    </div>
+    
+    <!-- Bootstrap 5 JS Bundle -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="/js/api.js"></script>
+    <script src="/js/auth.js"></script>
+    
+    <script>
+        // Password strength checker with visual meter
+        document.getElementById('password').addEventListener('input', function() {
+            const password = this.value;
+            const strengthFill = document.getElementById('passwordStrengthFill');
+            const strengthText = document.getElementById('passwordStrengthText');
+            
+            // Check requirements
+            const hasLength = password.length >= 6;
+            const hasUppercase = /[A-Z]/.test(password);
+            const hasLowercase = /[a-z]/.test(password);
+            const hasNumber = /\d/.test(password);
+            
+            // Update requirement indicators
+            updateRequirement('req-length', hasLength);
+            updateRequirement('req-uppercase', hasUppercase);
+            updateRequirement('req-lowercase', hasLowercase);
+            updateRequirement('req-number', hasNumber);
+            
+            // Calculate strength
+            let strength = 0;
+            if (hasLength) strength++;
+            if (hasUppercase) strength++;
+            if (hasLowercase) strength++;
+            if (hasNumber) strength++;
+            
+            // Update strength meter
+            strengthFill.className = 'password-strength-fill';
+            if (strength <= 1) {
+                strengthFill.classList.add('weak');
+                strengthText.textContent = 'Weak password';
+                strengthText.className = 'password-strength-text weak';
+            } else if (strength <= 2) {
+                strengthFill.classList.add('medium');
+                strengthText.textContent = 'Medium password';
+                strengthText.className = 'password-strength-text medium';
+            } else if (strength <= 3) {
+                strengthFill.classList.add('medium');
+                strengthText.textContent = 'Good password';
+                strengthText.className = 'password-strength-text medium';
+            } else {
+                strengthFill.classList.add('strong');
+                strengthText.textContent = 'Strong password';
+                strengthText.className = 'password-strength-text strong';
+            }
+        });
+        
+        function updateRequirement(id, isValid) {
+            const element = document.getElementById(id);
+            const icon = element.querySelector('i');
+            
+            if (isValid) {
+                element.classList.remove('invalid');
+                element.classList.add('valid');
+                icon.className = 'bi bi-check-circle';
+            } else {
+                element.classList.remove('valid');
+                element.classList.add('invalid');
+                icon.className = 'bi bi-x-circle';
+            }
+        }
+        
+        // Confirm password validation
+        document.getElementById('confirmPassword').addEventListener('input', function() {
+            const password = document.getElementById('password').value;
+            const confirmPassword = this.value;
+            
+            if (confirmPassword && password !== confirmPassword) {
+                this.setCustomValidity('Passwords do not match');
+            } else {
+                this.setCustomValidity('');
+            }
+        });
+    </script>
+</body>
+</html>

@@ -1,0 +1,98 @@
+<!-- Modern Sidebar Component -->
+<aside class="sidebar" id="sidebar">
+    <div class="sidebar-header">
+        <a href="/complaints.html" class="sidebar-brand">
+            <i class="bi bi-box-seam"></i>
+            <span class="sidebar-brand-text">SCMS</span>
+        </a>
+        <button class="sidebar-toggle" id="sidebarToggle" title="Toggle Sidebar">
+            <i class="bi bi-list"></i>
+        </button>
+    </div>
+    
+    <nav class="sidebar-nav">
+        <!-- User Menu -->
+        <div class="sidebar-section">
+            <div class="sidebar-section-title">User Menu</div>
+            <ul class="sidebar-menu">
+                <li class="sidebar-menu-item">
+                    <a href="/complaints.html" class="sidebar-menu-link" data-page="complaints">
+                        <i class="bi bi-speedometer2"></i>
+                        <span class="sidebar-menu-text">Dashboard</span>
+                    </a>
+                </li>
+                <li class="sidebar-menu-item">
+                    <a href="/complaint-create.html" class="sidebar-menu-link" data-page="create-complaint">
+                        <i class="bi bi-plus-circle"></i>
+                        <span class="sidebar-menu-text">Raise Complaint</span>
+                    </a>
+                </li>
+                <li class="sidebar-menu-item">
+                    <a href="/complaints.html" class="sidebar-menu-link" data-page="history">
+                        <i class="bi bi-clock-history"></i>
+                        <span class="sidebar-menu-text">Complaint History</span>
+                    </a>
+                </li>
+                <li class="sidebar-menu-item">
+                    <a href="/complaint-track.html" class="sidebar-menu-link" data-page="track">
+                        <i class="bi bi-search"></i>
+                        <span class="sidebar-menu-text">Track Complaint</span>
+                    </a>
+                </li>
+                <li class="sidebar-menu-item">
+                    <a href="/profile.html" class="sidebar-menu-link" data-page="profile">
+                        <i class="bi bi-person"></i>
+                        <span class="sidebar-menu-text">Profile</span>
+                    </a>
+                </li>
+            </ul>
+        </div>
+        
+        <!-- Admin Menu -->
+        <div class="sidebar-section" id="adminSection" style="display: none;">
+            <div class="sidebar-section-title">Admin Panel</div>
+            <ul class="sidebar-menu">
+                <li class="sidebar-menu-item">
+                    <a href="/admin-dashboard.html" class="sidebar-menu-link" data-page="admin-dashboard">
+                        <i class="bi bi-shield-lock"></i>
+                        <span class="sidebar-menu-text">Admin Dashboard</span>
+                    </a>
+                </li>
+                <li class="sidebar-menu-item">
+                    <a href="/manage-users.html" class="sidebar-menu-link" data-page="manage-users">
+                        <i class="bi bi-people"></i>
+                        <span class="sidebar-menu-text">Manage Users</span>
+                    </a>
+                </li>
+                <li class="sidebar-menu-item">
+                    <a href="/manage-complaints.html" class="sidebar-menu-link" data-page="manage-complaints">
+                        <i class="bi bi-file-text"></i>
+                        <span class="sidebar-menu-text">Manage Complaints</span>
+                    </a>
+                </li>
+            </ul>
+        </div>
+        
+        <!-- System -->
+        <div class="sidebar-section">
+            <div class="sidebar-section-title">System</div>
+            <ul class="sidebar-menu">
+                <li class="sidebar-menu-item">
+                    <a href="#" class="sidebar-menu-link" id="logoutBtn">
+                        <i class="bi bi-box-arrow-right"></i>
+                        <span class="sidebar-menu-text">Logout</span>
+                    </a>
+                </li>
+            </ul>
+        </div>
+    </nav>
+    
+    <div class="sidebar-footer">
+        <div class="sidebar-menu-text" style="font-size: var(--font-xs); color: var(--text-muted);">
+            SCMS v1.0.0
+        </div>
+    </div>
+</aside>
+
+<!-- Mobile Overlay -->
+<div class="sidebar-overlay" id="sidebarOverlay"></div>

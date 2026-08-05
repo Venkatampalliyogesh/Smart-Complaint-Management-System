@@ -1,0 +1,682 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Profile - Smart Complaint Management System</title>
+    
+    <!-- Google Fonts - Poppins -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    
+    <!-- Bootstrap 5 CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+    
+    <!-- Bootstrap Icons -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.1/font/bootstrap-icons.css">
+    
+    <!-- Modern CSS Framework -->
+    <link rel="stylesheet" href="/css/modern.css">
+    
+    <style>
+        .dashboard-layout {
+            display: flex;
+            min-height: 100vh;
+        }
+        
+        .main-content {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            margin-left: 260px;
+            transition: margin-left 300ms ease-in-out;
+        }
+        
+        .main-content.sidebar-collapsed {
+            margin-left: 70px;
+        }
+        
+        .content-area {
+            padding: 2rem;
+            flex: 1;
+            background: #F8FAFC;
+        }
+        
+        .page-header {
+            margin-bottom: 2rem;
+        }
+        
+        .page-header h2 {
+            font-size: 1.875rem;
+            font-weight: 600;
+            color: #1E293B;
+            margin-bottom: 0.5rem;
+        }
+        
+        .page-header p {
+            color: #64748B;
+            font-size: 0.875rem;
+        }
+        
+        .profile-header-card {
+            background: linear-gradient(135deg, #2563EB 0%, #1E40AF 100%);
+            border-radius: 1rem;
+            padding: 2rem;
+            color: white;
+            margin-bottom: 2rem;
+            display: flex;
+            align-items: center;
+            gap: 2rem;
+            box-shadow: 0 10px 25px rgba(37, 99, 235, 0.3);
+        }
+        
+        .profile-avatar-large {
+            width: 100px;
+            height: 100px;
+            border-radius: 50%;
+            background: rgba(255, 255, 255, 0.2);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 2.5rem;
+            font-weight: 600;
+            border: 3px solid rgba(255, 255, 255, 0.3);
+            position: relative;
+        }
+        
+        .profile-avatar-upload {
+            position: absolute;
+            bottom: 0;
+            right: 0;
+            width: 32px;
+            height: 32px;
+            background: white;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: #2563EB;
+            cursor: pointer;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
+            transition: all 0.3s ease;
+        }
+        
+        .profile-avatar-upload:hover {
+            transform: scale(1.1);
+        }
+        
+        .profile-info h3 {
+            margin: 0;
+            font-size: 1.5rem;
+            font-weight: 600;
+        }
+        
+        .profile-info p {
+            margin: 0.5rem 0 0 0;
+            opacity: 0.9;
+        }
+        
+        .profile-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+            gap: 2rem;
+        }
+        
+        .profile-card {
+            background: white;
+            border: 1px solid #E2E8F0;
+            border-radius: 1rem;
+            overflow: hidden;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+        }
+        
+        .profile-card-header {
+            background: #F8FAFC;
+            padding: 1.5rem;
+            border-bottom: 1px solid #E2E8F0;
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+        }
+        
+        .profile-card-header h3 {
+            margin: 0;
+            font-size: 1.125rem;
+            font-weight: 600;
+            color: #1E293B;
+        }
+        
+        .profile-card-header i {
+            color: #2563EB;
+            font-size: 1.25rem;
+        }
+        
+        .profile-card-body {
+            padding: 2rem;
+        }
+        
+        .form-group {
+            margin-bottom: 1.5rem;
+        }
+        
+        .form-label {
+            font-weight: 600;
+            color: #1E293B;
+            margin-bottom: 0.5rem;
+            display: block;
+        }
+        
+        .form-control {
+            padding: 0.75rem 1rem;
+            border: 2px solid #E2E8F0;
+            border-radius: 0.5rem;
+            font-size: 1rem;
+            transition: all 0.3s ease;
+        }
+        
+        .form-control:focus {
+            border-color: #2563EB;
+            box-shadow: 0 0 0 4px rgba(37, 99, 235, 0.1);
+        }
+        
+        .form-control:disabled {
+            background: #F8FAFC;
+            color: #64748B;
+        }
+        
+        .btn-save {
+            padding: 0.875rem 2rem;
+            background: linear-gradient(135deg, #2563EB 0%, #1E40AF 100%);
+            color: white;
+            border: none;
+            border-radius: 0.5rem;
+            font-weight: 600;
+            font-size: 1rem;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+        
+        .btn-save:hover:not(:disabled) {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(37, 99, 235, 0.3);
+        }
+        
+        .btn-save:disabled {
+            opacity: 0.7;
+            cursor: not-allowed;
+        }
+        
+        .btn-cancel {
+            padding: 0.875rem 2rem;
+            background: white;
+            color: #64748B;
+            border: 2px solid #E2E8F0;
+            border-radius: 0.5rem;
+            font-weight: 600;
+            font-size: 1rem;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+        
+        .btn-cancel:hover {
+            border-color: #DC2626;
+            color: #DC2626;
+        }
+        
+        .info-item {
+            display: flex;
+            justify-content: space-between;
+            padding: 1rem 0;
+            border-bottom: 1px solid #E2E8F0;
+        }
+        
+        .info-item:last-child {
+            border-bottom: none;
+        }
+        
+        .info-label {
+            color: #64748B;
+            font-size: 0.9rem;
+        }
+        
+        .info-value {
+            font-weight: 600;
+            color: #1E293B;
+        }
+        
+        .stat-card {
+            background: #F8FAFC;
+            border-radius: 0.75rem;
+            padding: 1.5rem;
+            text-align: center;
+            border: 1px solid #E2E8F0;
+        }
+        
+        .stat-value {
+            font-size: 2rem;
+            font-weight: 700;
+            color: #2563EB;
+            margin-bottom: 0.5rem;
+        }
+        
+        .stat-label {
+            color: #64748B;
+            font-size: 0.875rem;
+        }
+        
+        @media (max-width: 1024px) {
+            .main-content {
+                margin-left: 0;
+            }
+        }
+        
+        @media (max-width: 768px) {
+            .content-area {
+                padding: 1rem;
+            }
+            
+            .profile-header-card {
+                flex-direction: column;
+                text-align: center;
+                padding: 1.5rem;
+            }
+            
+            .profile-grid {
+                grid-template-columns: 1fr;
+            }
+            
+            .profile-card-body {
+                padding: 1.5rem;
+            }
+        }
+    </style>
+        
+        .profile-card {
+            background: white;
+            border: 1px solid #E2E8F0;
+            border-radius: 1rem;
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+            overflow: hidden;
+        }
+        
+        .profile-card-header {
+            background: #F8FAFC;
+            padding: 1.5rem;
+            border-bottom: 1px solid #E2E8F0;
+            font-weight: 600;
+            color: #1E293B;
+        }
+        
+        .profile-card-header i {
+            color: #2563EB;
+            margin-right: 0.5rem;
+        }
+        
+        .profile-card-body {
+            padding: 2rem;
+        }
+        
+        .info-row {
+            display: flex;
+            justify-content: space-between;
+            padding: 1rem 0;
+            border-bottom: 1px solid #E2E8F0;
+        }
+        
+        .info-row:last-child {
+            border-bottom: none;
+        }
+        
+        .info-label {
+            color: #64748B;
+            font-size: 0.875rem;
+        }
+        
+        .info-value {
+            font-weight: 500;
+            color: #1E293B;
+        }
+        
+        @media (max-width: 1024px) {
+            .main-content {
+                margin-left: 0;
+            }
+        }
+        
+        @media (max-width: 768px) {
+            .content-area {
+                padding: 1rem;
+            }
+            
+            .profile-header-card {
+                flex-direction: column;
+                text-align: center;
+                padding: 1.5rem;
+            }
+            
+            .profile-grid {
+                grid-template-columns: 1fr;
+            }
+            
+            .profile-card-body {
+                padding: 1.5rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="dashboard-layout">
+        <!-- Sidebar Component -->
+        <div id="sidebar-container"></div>
+        
+        <!-- Main Content -->
+        <div class="main-content" id="mainContent">
+            <!-- Navbar Component -->
+            <div id="navbar-container"></div>
+            
+            <!-- Content Area -->
+            <div class="content-area">
+                <div class="page-header">
+                    <h2><i class="bi bi-person me-2"></i>My Profile</h2>
+                    <p>Manage your account settings and preferences.</p>
+                </div>
+                
+                <div id="alert" class="alert"></div>
+                
+                <!-- Profile Header -->
+                <div class="profile-header-card">
+                    <div class="profile-avatar-large">
+                        J
+                        <div class="profile-avatar-upload">
+                            <i class="bi bi-camera"></i>
+                        </div>
+                    </div>
+                    <div class="profile-info">
+                        <h3>John Doe</h3>
+                        <p>john.doe@example.com</p>
+                        <p style="margin-top: 0.5rem;">
+                            <span class="badge" style="background: rgba(255,255,255,0.2);">User</span>
+                        </p>
+                    </div>
+                </div>
+                
+                <div class="profile-grid">
+                    <!-- Personal Information -->
+                    <div class="profile-card">
+                        <div class="profile-card-header">
+                            <i class="bi bi-person"></i>
+                            <h3>Personal Information</h3>
+                        </div>
+                        <div class="profile-card-body">
+                            <div class="info-item">
+                                <span class="info-label">First Name</span>
+                                <span class="info-value">John</span>
+                            </div>
+                            <div class="info-item">
+                                <span class="info-label">Last Name</span>
+                                <span class="info-value">Doe</span>
+                            </div>
+                            <div class="info-item">
+                                <span class="info-label">Email</span>
+                                <span class="info-value">john.doe@example.com</span>
+                            </div>
+                            <div class="info-item">
+                                <span class="info-label">Phone</span>
+                                <span class="info-value">+1 234 567 8900</span>
+                            </div>
+                            <div class="info-item">
+                                <span class="info-label">Member Since</span>
+                                <span class="info-value">January 10, 2024</span>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- Edit Profile Form -->
+                    <div class="profile-card">
+                        <div class="profile-card-header">
+                            <i class="bi bi-pencil"></i>
+                            <h3>Edit Profile</h3>
+                        </div>
+                        <div class="profile-card-body">
+                            <form id="profileForm">
+                                <div class="form-group">
+                                    <label for="firstName" class="form-label">First Name</label>
+                                    <input type="text" class="form-control" id="firstName" value="John" required>
+                                </div>
+                                <div class="form-group">
+                                    <label for="lastName" class="form-label">Last Name</label>
+                                    <input type="text" class="form-control" id="lastName" value="Doe" required>
+                                </div>
+                                <div class="form-group">
+                                    <label for="phone" class="form-label">Phone Number</label>
+                                    <input type="tel" class="form-control" id="phone" value="+1 234 567 8900">
+                                </div>
+                                <div class="d-flex gap-2">
+                                    <button type="submit" class="btn-save">
+                                        <i class="bi bi-check-circle"></i>
+                                        Save Changes
+                                    </button>
+                                    <button type="reset" class="btn-cancel">
+                                        <i class="bi bi-arrow-counterclockwise"></i>
+                                        Reset
+                                    </button>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+                    
+                    <!-- Change Password -->
+                    <div class="profile-card">
+                        <div class="profile-card-header">
+                            <i class="bi bi-lock"></i>
+                            <h3>Change Password</h3>
+                        </div>
+                        <div class="profile-card-body">
+                            <form id="passwordForm">
+                                <div class="form-group">
+                                    <label for="currentPassword" class="form-label">Current Password</label>
+                                    <input type="password" class="form-control" id="currentPassword" required>
+                                </div>
+                                <div class="form-group">
+                                    <label for="newPassword" class="form-label">New Password</label>
+                                    <input type="password" class="form-control" id="newPassword" required>
+                                </div>
+                                <div class="form-group">
+                                    <label for="confirmPassword" class="form-label">Confirm New Password</label>
+                                    <input type="password" class="form-control" id="confirmPassword" required>
+                                </div>
+                                <button type="submit" class="btn-save">
+                                    <i class="bi bi-shield-check"></i>
+                                    Update Password
+                                </button>
+                            </form>
+                        </div>
+                    </div>
+                    
+                    <!-- Account Statistics -->
+                    <div class="profile-card">
+                        <div class="profile-card-header">
+                            <i class="bi bi-bar-chart"></i>
+                            <h3>Account Statistics</h3>
+                        </div>
+                        <div class="profile-card-body">
+                            <div class="row g-3">
+                                <div class="col-6">
+                                    <div class="stat-card">
+                                        <div class="stat-value">24</div>
+                                        <div class="stat-label">Total Complaints</div>
+                                    </div>
+                                </div>
+                                <div class="col-6">
+                                    <div class="stat-card">
+                                        <div class="stat-value">18</div>
+                                        <div class="stat-label">Resolved</div>
+                                    </div>
+                                </div>
+                                <div class="col-6">
+                                    <div class="stat-card">
+                                        <div class="stat-value">5</div>
+                                        <div class="stat-label">Pending</div>
+                                    </div>
+                                </div>
+                                <div class="col-6">
+                                    <div class="stat-card">
+                                        <div class="stat-value">1</div>
+                                        <div class="stat-label">In Progress</div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <!-- Toast Container -->
+    <div class="toast-container position-fixed top-0 end-0 p-3">
+        <div id="toast" class="toast" role="alert" aria-live="assertive" aria-atomic="true">
+            <div class="toast-header">
+                <i class="bi bi-bell me-2" id="toastIcon"></i>
+                <strong class="me-auto" id="toastTitle">Notification</strong>
+                <button type="button" class="btn-close" data-bs-dismiss="toast" aria-label="Close"></button>
+            </div>
+            <div class="toast-body" id="toastMessage"></div>
+        </div>
+    </div>
+    
+    <!-- Bootstrap 5 JS Bundle -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="/js/api.js"></script>
+    
+    <script>
+        // Load components and initialize
+        document.addEventListener('DOMContentLoaded', function() {
+            // Load sidebar
+            document.getElementById('sidebar-container').innerHTML = `
+                <div class="sidebar">
+                    <div class="sidebar-header">
+                        <div class="sidebar-logo">
+                            <i class="bi bi-box-seam"></i>
+                        </div>
+                        <div class="sidebar-title">SCMS</div>
+                    </div>
+                    
+                    <nav class="sidebar-nav">
+                        <a href="user-dashboard.html" class="sidebar-nav-item">
+                            <i class="bi bi-speedometer2"></i>
+                            <span>Dashboard</span>
+                        </a>
+                        <a href="complaint-create.html" class="sidebar-nav-item">
+                            <i class="bi bi-plus-circle"></i>
+                            <span>Raise Complaint</span>
+                        </a>
+                        <a href="complaint-track.html" class="sidebar-nav-item">
+                            <i class="bi bi-clock-history"></i>
+                            <span>My Complaints</span>
+                        </a>
+                        <a href="notifications.html" class="sidebar-nav-item">
+                            <i class="bi bi-bell"></i>
+                            <span>Notifications</span>
+                            <span class="sidebar-badge">3</span>
+                        </a>
+                        <a href="profile.html" class="sidebar-nav-item active">
+                            <i class="bi bi-person"></i>
+                            <span>Profile</span>
+                        </a>
+                    </nav>
+                    
+                    <div class="sidebar-footer">
+                        <a href="index.html" class="sidebar-nav-item logout">
+                            <i class="bi bi-box-arrow-right"></i>
+                            <span>Logout</span>
+                        </a>
+                    </div>
+                </div>
+            `;
+            
+            // Load navbar
+            document.getElementById('navbar-container').innerHTML = `
+                <div class="navbar">
+                    <div class="navbar-left">
+                        <button class="navbar-toggle" id="sidebarToggle">
+                            <i class="bi bi-list"></i>
+                        </button>
+                        <div class="navbar-search">
+                            <i class="bi bi-search"></i>
+                            <input type="text" placeholder="Search complaints...">
+                        </div>
+                    </div>
+                    
+                    <div class="navbar-right">
+                        <button class="navbar-icon-btn" id="themeToggle">
+                            <i class="bi bi-moon"></i>
+                        </button>
+                        <button class="navbar-icon-btn" id="notificationBtn">
+                            <i class="bi bi-bell"></i>
+                            <span class="navbar-badge">3</span>
+                        </button>
+                        <div class="navbar-user">
+                            <div class="navbar-user-avatar">
+                                <i class="bi bi-person"></i>
+                            </div>
+                            <div class="navbar-user-info">
+                                <div class="navbar-user-name">John Doe</div>
+                                <div class="navbar-user-role">User</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            `;
+            
+            // Initialize sidebar toggle
+            const sidebarToggle = document.getElementById('sidebarToggle');
+            const mainContent = document.getElementById('mainContent');
+            
+            if (sidebarToggle) {
+                sidebarToggle.addEventListener('click', function() {
+                    mainContent.classList.toggle('sidebar-collapsed');
+                });
+            }
+            
+            // Initialize theme toggle
+            const themeToggle = document.getElementById('themeToggle');
+            let isDark = false;
+            
+            if (themeToggle) {
+                themeToggle.addEventListener('click', function() {
+                    isDark = !isDark;
+                    document.body.classList.toggle('dark-theme', isDark);
+                    themeToggle.innerHTML = isDark ? '<i class="bi bi-sun"></i>' : '<i class="bi bi-moon"></i>';
+                });
+            }
+            
+            // Initialize form handlers
+            initializeForms();
+        });
+        
+        function initializeForms() {
+            // Profile form handler
+            document.getElementById('profileForm').addEventListener('submit', function(e) {
+                e.preventDefault();
+                // Implement profile update logic
+                console.log('Updating profile...');
+            });
+            
+            // Password form handler
+            document.getElementById('passwordForm').addEventListener('submit', function(e) {
+                e.preventDefault();
+                // Implement password update logic
+                console.log('Updating password...');
+            });
+        }
+    </script>
+</body>
+</html>

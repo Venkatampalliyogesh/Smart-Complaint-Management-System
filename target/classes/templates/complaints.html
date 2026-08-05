@@ -1,0 +1,342 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dashboard - Smart Complaint Management System</title>
+    
+    <!-- Google Fonts - Poppins -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    
+    <!-- Bootstrap 5 CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+    
+    <!-- Bootstrap Icons -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.1/font/bootstrap-icons.css">
+    
+    <!-- Modern CSS Framework -->
+    <link rel="stylesheet" href="/css/modern.css">
+    
+    <style>
+        .dashboard-layout {
+            display: flex;
+            min-height: 100vh;
+        }
+        
+        .main-content {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            margin-left: 260px;
+            transition: margin-left 300ms ease-in-out;
+        }
+        
+        .main-content.sidebar-collapsed {
+            margin-left: 70px;
+        }
+        
+        .content-area {
+            padding: 2rem;
+            flex: 1;
+        }
+        
+        .page-header {
+            margin-bottom: 2rem;
+        }
+        
+        .page-header h2 {
+            font-size: 1.875rem;
+            font-weight: 600;
+            color: #1E293B;
+            margin-bottom: 0.5rem;
+        }
+        
+        .page-header p {
+            color: #64748B;
+            font-size: 0.875rem;
+        }
+        
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+            gap: 1.5rem;
+            margin-bottom: 2rem;
+        }
+        
+        .quick-actions {
+            display: flex;
+            gap: 1rem;
+            margin-bottom: 2rem;
+            flex-wrap: wrap;
+        }
+        
+        .quick-action-btn {
+            flex: 1;
+            min-width: 150px;
+            padding: 1rem;
+            background: white;
+            border: 1px solid #E2E8F0;
+            border-radius: 0.75rem;
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+            cursor: pointer;
+            transition: all 150ms ease-in-out;
+            text-decoration: none;
+            color: #1E293B;
+        }
+        
+        .quick-action-btn:hover {
+            border-color: #2563EB;
+            box-shadow: 0 4px 12px rgba(37, 99, 235, 0.1);
+            transform: translateY(-2px);
+        }
+        
+        .quick-action-btn i {
+            font-size: 1.5rem;
+            color: #2563EB;
+        }
+        
+        .quick-action-btn span {
+            font-weight: 500;
+        }
+        
+        @media (max-width: 1024px) {
+            .main-content {
+                margin-left: 0;
+            }
+        }
+        
+        @media (max-width: 768px) {
+            .content-area {
+                padding: 1rem;
+            }
+            
+            .stats-grid {
+                grid-template-columns: repeat(2, 1fr);
+            }
+            
+            .quick-actions {
+                flex-direction: column;
+            }
+            
+            .quick-action-btn {
+                width: 100%;
+            }
+        }
+        
+        @media (max-width: 576px) {
+            .stats-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="dashboard-layout">
+        <!-- Sidebar Component -->
+        <div id="sidebar-container"></div>
+        
+        <!-- Main Content -->
+        <div class="main-content" id="mainContent">
+            <!-- Navbar Component -->
+            <div id="navbar-container"></div>
+            
+            <!-- Content Area -->
+            <div class="content-area">
+                <div class="page-header">
+                    <h2><i class="bi bi-speedometer2 me-2"></i>Dashboard</h2>
+                    <p>Welcome back! Here's an overview of your complaints.</p>
+                </div>
+                
+                <div id="alert" class="alert"></div>
+                
+                <!-- Loading Spinner -->
+                <div id="loadingSpinner" class="text-center py-5 d-none">
+                    <div class="spinner-border text-primary" role="status">
+                        <span class="visually-hidden">Loading...</span>
+                    </div>
+                </div>
+                
+                <!-- Stats Cards -->
+                <div class="stats-grid" id="statsGrid">
+                    <div class="dashboard-card">
+                        <div class="dashboard-card-icon primary">
+                            <i class="bi bi-file-text"></i>
+                        </div>
+                        <div class="dashboard-card-value" id="totalComplaints">-</div>
+                        <div class="dashboard-card-label">Total Complaints</div>
+                    </div>
+                    
+                    <div class="dashboard-card">
+                        <div class="dashboard-card-icon warning">
+                            <i class="bi bi-clock-history"></i>
+                        </div>
+                        <div class="dashboard-card-value" id="pendingComplaints">-</div>
+                        <div class="dashboard-card-label">Pending</div>
+                    </div>
+                    
+                    <div class="dashboard-card">
+                        <div class="dashboard-card-icon info">
+                            <i class="bi bi-person-check"></i>
+                        </div>
+                        <div class="dashboard-card-value" id="assignedComplaints">-</div>
+                        <div class="dashboard-card-label">Assigned</div>
+                    </div>
+                    
+                    <div class="dashboard-card">
+                        <div class="dashboard-card-icon success">
+                            <i class="bi bi-check-circle"></i>
+                        </div>
+                        <div class="dashboard-card-value" id="resolvedComplaints">-</div>
+                        <div class="dashboard-card-label">Resolved</div>
+                    </div>
+                </div>
+                
+                <!-- Quick Actions -->
+                <div class="quick-actions">
+                    <a href="/complaint-create.html" class="quick-action-btn">
+                        <i class="bi bi-plus-circle"></i>
+                        <span>Raise Complaint</span>
+                    </a>
+                    <a href="/complaint-track.html" class="quick-action-btn">
+                        <i class="bi bi-search"></i>
+                        <span>Track Complaint</span>
+                    </a>
+                    <a href="/profile.html" class="quick-action-btn">
+                        <i class="bi bi-person"></i>
+                        <span>My Profile</span>
+                    </a>
+                </div>
+                
+                <!-- Recent Complaints -->
+                <div class="card">
+                    <div class="card-header">
+                        <div>
+                            <i class="bi bi-clock-history me-2"></i>Recent Complaints
+                        </div>
+                        <a href="/complaints.html" class="btn btn-sm btn-outline-primary">
+                            View All
+                        </a>
+                    </div>
+                    <div class="card-body">
+                        <!-- Filters -->
+                        <div class="row g-3 mb-4">
+                            <div class="col-md-4">
+                                <label for="searchInput" class="form-label">Search</label>
+                                <div class="input-group">
+                                    <span class="input-group-text"><i class="bi bi-search"></i></span>
+                                    <input type="text" class="form-control" id="searchInput" placeholder="Title, ticket number...">
+                                </div>
+                            </div>
+                            <div class="col-md-3">
+                                <label for="statusFilter" class="form-label">Status</label>
+                                <select class="form-select" id="statusFilter">
+                                    <option value="">All Statuses</option>
+                                    <option value="SUBMITTED">Submitted</option>
+                                    <option value="ASSIGNED">Assigned</option>
+                                    <option value="IN_PROGRESS">In Progress</option>
+                                    <option value="RESOLVED">Resolved</option>
+                                    <option value="CLOSED">Closed</option>
+                                    <option value="REJECTED">Rejected</option>
+                                </select>
+                            </div>
+                            <div class="col-md-3">
+                                <label for="categoryFilter" class="form-label">Category</label>
+                                <select class="form-select" id="categoryFilter">
+                                    <option value="">All Categories</option>
+                                </select>
+                            </div>
+                            <div class="col-md-2 d-flex align-items-end">
+                                <button id="applyFiltersBtn" class="btn btn-primary w-100">
+                                    <i class="bi bi-funnel me-1"></i>Apply
+                                </button>
+                            </div>
+                        </div>
+                        
+                        <!-- Table -->
+                        <div class="table-responsive">
+                            <table class="table table-hover">
+                                <thead class="table-light">
+                                    <tr>
+                                        <th>Ticket</th>
+                                        <th>Title</th>
+                                        <th>Category</th>
+                                        <th>Priority</th>
+                                        <th>Status</th>
+                                        <th>Created</th>
+                                        <th>Actions</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="complaintsTableBody">
+                                    <tr><td colspan="7" class="text-center text-muted">Loading...</td></tr>
+                                </tbody>
+                            </table>
+                        </div>
+                        
+                        <!-- Pagination -->
+                        <div id="pagination" class="d-flex justify-content-center mt-4"></div>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Footer Component -->
+            <div id="footer-container"></div>
+        </div>
+    </div>
+    
+    <!-- Toast Container -->
+    <div class="toast-container position-fixed top-0 end-0 p-3">
+        <div id="toast" class="toast" role="alert" aria-live="assertive" aria-atomic="true">
+            <div class="toast-header">
+                <i class="bi bi-bell me-2" id="toastIcon"></i>
+                <strong class="me-auto" id="toastTitle">Notification</strong>
+                <button type="button" class="btn-close" data-bs-dismiss="toast" aria-label="Close"></button>
+            </div>
+            <div class="toast-body" id="toastMessage"></div>
+        </div>
+    </div>
+    
+    <!-- Bootstrap 5 JS Bundle -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="/js/api.js"></script>
+    <script src="/js/ui-components.js"></script>
+    <script src="/js/complaints.js"></script>
+    
+    <script>
+        // Load components
+        document.addEventListener('DOMContentLoaded', function() {
+            // Load sidebar
+            fetch('/components/sidebar.html')
+                .then(response => response.text())
+                .then(html => {
+                    document.getElementById('sidebar-container').innerHTML = html;
+                    // Reinitialize sidebar after loading
+                    if (window.UIComponents && window.UIComponents.initializeSidebar) {
+                        window.UIComponents.initializeSidebar();
+                    }
+                });
+            
+            // Load navbar
+            fetch('/components/navbar.html')
+                .then(response => response.text())
+                .then(html => {
+                    document.getElementById('navbar-container').innerHTML = html;
+                    // Reinitialize navbar after loading
+                    if (window.UIComponents && window.UIComponents.initializeNavbar) {
+                        window.UIComponents.initializeNavbar();
+                    }
+                });
+            
+            // Load footer
+            fetch('/components/footer.html')
+                .then(response => response.text())
+                .then(html => {
+                    document.getElementById('footer-container').innerHTML = html;
+                });
+        });
+    </script>
+</body>
+</html>

@@ -1,0 +1,185 @@
+/* Custom styles to complement Bootstrap 5 */
+:root {
+    --primary: #2563eb;
+    --primary-dark: #1d4ed8;
+    --danger: #dc2626;
+    --success: #16a34a;
+    --bg: #f8fafc;
+    --card: #ffffff;
+    --text: #1e293b;
+    --muted: #64748b;
+    --border: #e2e8f0;
+    --radius: 8px;
+    --shadow: 0 4px 6px -1px rgb(0 0 0 / 0.1);
+}
+
+/* Card enhancements */
+.card {
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    box-shadow: var(--shadow);
+}
+
+.card-header {
+    background-color: var(--bg);
+    border-bottom: 1px solid var(--border);
+    font-weight: 600;
+}
+
+/* Table enhancements */
+.table thead th {
+    border-bottom: 2px solid var(--border);
+    font-weight: 600;
+    text-transform: uppercase;
+    font-size: 0.75rem;
+    letter-spacing: 0.05em;
+}
+
+/* Badge enhancements */
+.badge {
+    font-weight: 500;
+    padding: 0.35em 0.65em;
+}
+
+/* Status badges custom colors */
+.status-active {
+    background: #d1fae5;
+    color: #065f46;
+}
+
+.status-inactive {
+    background: #fee2e2;
+    color: #991b1b;
+}
+
+/* Priority badges custom colors */
+.priority-low {
+    background: #dbeafe;
+    color: #1e40af;
+}
+
+.priority-medium {
+    background: #fef3c7;
+    color: #92400e;
+}
+
+.priority-high {
+    background: #fed7aa;
+    color: #9a3412;
+}
+
+.priority-critical {
+    background: #fecaca;
+    color: #991b1b;
+}
+
+/* Status badges custom colors */
+.status-submitted {
+    background: #e0e7ff;
+    color: #3730a3;
+}
+
+.status-assigned {
+    background: #dbeafe;
+    color: #1e40af;
+}
+
+.status-in-progress {
+    background: #fef3c7;
+    color: #92400e;
+}
+
+.status-resolved {
+    background: #d1fae5;
+    color: #065f46;
+}
+
+.status-closed {
+    background: #e5e7eb;
+    color: #374151;
+}
+
+.status-rejected {
+    background: #fecaca;
+    color: #991b1b;
+}
+
+/* Form validation improvements */
+.was-validated .form-control:invalid {
+    border-color: var(--danger);
+}
+
+.was-validated .form-control:valid {
+    border-color: var(--success);
+}
+
+/* Alert improvements */
+.alert {
+    border: none;
+    border-radius: var(--radius);
+    box-shadow: var(--shadow);
+}
+
+.alert-error {
+    background: #fef2f2;
+    color: var(--danger);
+    border: 1px solid #fecaca;
+}
+
+.alert-success {
+    background: #f0fdf4;
+    color: var(--success);
+    border: 1px solid #bbf7d0;
+}
+
+/* Alert show state */
+.alert.show {
+    display: block;
+}
+
+/* Loading state for forms */
+.loading {
+    opacity: 0.6;
+    pointer-events: none;
+}
+
+/* Custom utilities */
+.text-center {
+    text-align: center;
+}
+
+.text-muted {
+    color: var(--muted) !important;
+}
+
+/* Loading spinner enhancements */
+.spinner-border-sm {
+    width: 1rem;
+    height: 1rem;
+    border-width: 0.15em;
+}
+
+/* Input group enhancements */
+.input-group-text {
+    background-color: var(--bg);
+    border-color: var(--border);
+}
+
+/* Progress bar enhancements for charts */
+.progress {
+    height: 10px;
+    background-color: var(--bg);
+}
+
+/* Responsive adjustments */
+@media (max-width: 768px) {
+    .stats-grid {
+        grid-template-columns: repeat(2, 1fr);
+    }
+}
+
+@media (max-width: 576px) {
+    .stats-grid {
+        grid-template-columns: 1fr;
+    }
+}

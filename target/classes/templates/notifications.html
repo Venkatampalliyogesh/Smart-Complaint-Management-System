@@ -1,0 +1,666 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Notifications - Smart Complaint Management System</title>
+    
+    <!-- Google Fonts - Poppins -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    
+    <!-- Bootstrap 5 CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+    
+    <!-- Bootstrap Icons -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.1/font/bootstrap-icons.css">
+    
+    <!-- Modern CSS Framework -->
+    <link rel="stylesheet" href="/css/modern.css">
+    
+    <style>
+        .dashboard-layout {
+            display: flex;
+            min-height: 100vh;
+        }
+        
+        .main-content {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            margin-left: 260px;
+            transition: margin-left 300ms ease-in-out;
+        }
+        
+        .main-content.sidebar-collapsed {
+            margin-left: 70px;
+        }
+        
+        .content-area {
+            padding: 2rem;
+            flex: 1;
+            background: #F8FAFC;
+        }
+        
+        .page-header {
+            margin-bottom: 2rem;
+        }
+        
+        .page-header h2 {
+            font-size: 1.875rem;
+            font-weight: 600;
+            color: #1E293B;
+            margin-bottom: 0.5rem;
+        }
+        
+        .page-header p {
+            color: #64748B;
+            font-size: 0.875rem;
+        }
+        
+        .notifications-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 2rem;
+            flex-wrap: wrap;
+            gap: 1rem;
+        }
+        
+        .notifications-actions {
+            display: flex;
+            gap: 0.5rem;
+        }
+        
+        .btn-action {
+            padding: 0.5rem 1rem;
+            border: 1px solid #E2E8F0;
+            background: white;
+            color: #64748B;
+            border-radius: 0.375rem;
+            font-weight: 500;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+        
+        .btn-action:hover {
+            border-color: #2563EB;
+            color: #2563EB;
+            background: #EFF6FF;
+        }
+        
+        .notification-card {
+            background: white;
+            border: 1px solid #E2E8F0;
+            border-radius: 1rem;
+            padding: 1.5rem;
+            margin-bottom: 1rem;
+            transition: all 0.3s ease;
+            cursor: pointer;
+            position: relative;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+        }
+        
+        .notification-card:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.1);
+            border-color: #2563EB;
+        }
+        
+        .notification-card.unread {
+            border-left: 4px solid #2563EB;
+            background: #EFF6FF;
+        }
+        
+        .notification-card-header {
+            display: flex;
+            align-items: flex-start;
+            gap: 1rem;
+            margin-bottom: 1rem;
+        }
+        
+        .notification-icon {
+            width: 48px;
+            height: 48px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.25rem;
+            flex-shrink: 0;
+        }
+        
+        .notification-icon.info {
+            background: #DBEAFE;
+            color: #1E40AF;
+        }
+        
+        .notification-icon.success {
+            background: #DCFCE7;
+            color: #166534;
+        }
+        
+        .notification-icon.warning {
+            background: #FEF3C7;
+            color: #92400E;
+        }
+        
+        .notification-icon.error {
+            background: #FEE2E2;
+            color: #991B1B;
+        }
+        
+        .notification-icon.complaint {
+            background: #E0F2FE;
+            color: #075985;
+        }
+        
+        .notification-content {
+            flex: 1;
+        }
+        
+        .notification-title {
+            font-weight: 600;
+            color: #1E293B;
+            margin-bottom: 0.5rem;
+            font-size: 1rem;
+        }
+        
+        .notification-message {
+            color: #64748B;
+            font-size: 0.9rem;
+            line-height: 1.6;
+            margin-bottom: 0.75rem;
+        }
+        
+        .notification-meta {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            font-size: 0.8rem;
+            color: #94A3B8;
+        }
+        
+        .notification-time {
+            display: flex;
+            align-items: center;
+            gap: 0.25rem;
+        }
+        
+        .notification-actions {
+            display: flex;
+            gap: 0.5rem;
+        }
+        
+        .notification-action-btn {
+            padding: 0.25rem 0.5rem;
+            border: none;
+            background: transparent;
+            color: #64748B;
+            cursor: pointer;
+            border-radius: 0.25rem;
+            transition: all 0.3s ease;
+        }
+        
+        .notification-action-btn:hover {
+            background: #F8FAFC;
+            color: #2563EB;
+        }
+        
+        .filter-tabs {
+            display: flex;
+            gap: 0.5rem;
+            margin-bottom: 2rem;
+            flex-wrap: wrap;
+        }
+        
+        .filter-tab {
+            padding: 0.75rem 1.5rem;
+            border: 1px solid #E2E8F0;
+            background: white;
+            color: #64748B;
+            border-radius: 2rem;
+            font-weight: 500;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+        
+        .filter-tab:hover {
+            border-color: #2563EB;
+            color: #2563EB;
+        }
+        
+        .filter-tab.active {
+            background: #2563EB;
+            color: white;
+            border-color: #2563EB;
+        }
+        
+        .notification-badge {
+            position: absolute;
+            top: 1rem;
+            right: 1rem;
+            width: 8px;
+            height: 8px;
+            background: #2563EB;
+            border-radius: 50%;
+        }
+        
+        .empty-state {
+            text-align: center;
+            padding: 4rem 2rem;
+        }
+        
+        .empty-state-icon {
+            font-size: 4rem;
+            color: #CBD5E1;
+            margin-bottom: 1rem;
+        }
+        
+        .empty-state-text {
+            color: #64748B;
+            font-size: 1.125rem;
+        }
+        
+        .empty-state-subtext {
+            color: #94A3B8;
+            font-size: 0.875rem;
+            margin-top: 0.5rem;
+        }
+        
+        @media (max-width: 1024px) {
+            .main-content {
+                margin-left: 0;
+            }
+        }
+        
+        @media (max-width: 768px) {
+            .content-area {
+                padding: 1rem;
+            }
+            
+            .notifications-header {
+                flex-direction: column;
+                align-items: flex-start;
+            }
+            
+            .notification-card {
+                padding: 1rem;
+            }
+            
+            .filter-tabs {
+                gap: 0.25rem;
+            }
+            
+            .filter-tab {
+                padding: 0.5rem 1rem;
+                font-size: 0.875rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="dashboard-layout">
+        <!-- Sidebar Component -->
+        <div id="sidebar-container"></div>
+        
+        <!-- Main Content -->
+        <div class="main-content" id="mainContent">
+            <!-- Navbar Component -->
+            <div id="navbar-container"></div>
+            
+            <!-- Content Area -->
+            <div class="content-area">
+                <div class="page-header">
+                    <h2><i class="bi bi-bell me-2"></i>Notifications</h2>
+                    <p>Stay updated with your complaint status and system alerts.</p>
+                </div>
+                
+                <div id="alert" class="alert"></div>
+                
+                <!-- Notifications Header -->
+                <div class="notifications-header">
+                    <div class="filter-tabs">
+                        <button class="filter-tab active">All</button>
+                        <button class="filter-tab">Unread (3)</button>
+                        <button class="filter-tab">Complaints</button>
+                        <button class="filter-tab">System</button>
+                    </div>
+                    <div class="notifications-actions">
+                        <button class="btn-action" onclick="markAllAsRead()">
+                            <i class="bi bi-check2-all"></i>
+                            Mark All Read
+                        </button>
+                        <button class="btn-action" onclick="clearAllNotifications()">
+                            <i class="bi bi-trash"></i>
+                            Clear All
+                        </button>
+                    </div>
+                </div>
+                
+                <!-- Notifications List -->
+                <div id="notificationsList">
+                    <!-- Unread Notification -->
+                    <div class="notification-card unread">
+                        <div class="notification-badge"></div>
+                        <div class="notification-card-header">
+                            <div class="notification-icon complaint">
+                                <i class="bi bi-file-text"></i>
+                            </div>
+                            <div class="notification-content">
+                                <div class="notification-title">Complaint Status Updated</div>
+                                <div class="notification-message">
+                                    Your complaint <strong>CMP-001</strong> (Internet connectivity issue) has been updated to "In Progress". Admin User is currently working on your issue.
+                                </div>
+                                <div class="notification-meta">
+                                    <div class="notification-time">
+                                        <i class="bi bi-clock"></i>
+                                        2 hours ago
+                                    </div>
+                                    <div class="notification-actions">
+                                        <button class="notification-action-btn" title="Mark as read">
+                                            <i class="bi bi-check"></i>
+                                        </button>
+                                        <button class="notification-action-btn" title="Delete">
+                                            <i class="bi bi-trash"></i>
+                                        </button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- Unread Notification -->
+                    <div class="notification-card unread">
+                        <div class="notification-badge"></div>
+                        <div class="notification-card-header">
+                            <div class="notification-icon info">
+                                <i class="bi bi-info-circle"></i>
+                            </div>
+                            <div class="notification-content">
+                                <div class="notification-title">New Comment on Your Complaint</div>
+                                <div class="notification-message">
+                                    Admin User has added a comment to your complaint <strong>CMP-001</strong>: "Thank you for reporting this issue. I'm currently investigating..."
+                                </div>
+                                <div class="notification-meta">
+                                    <div class="notification-time">
+                                        <i class="bi bi-clock"></i>
+                                        5 hours ago
+                                    </div>
+                                    <div class="notification-actions">
+                                        <button class="notification-action-btn" title="Mark as read">
+                                            <i class="bi bi-check"></i>
+                                        </button>
+                                        <button class="notification-action-btn" title="Delete">
+                                            <i class="bi bi-trash"></i>
+                                        </button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- Unread Notification -->
+                    <div class="notification-card unread">
+                        <div class="notification-badge"></div>
+                        <div class="notification-card-header">
+                            <div class="notification-icon success">
+                                <i class="bi bi-check-circle"></i>
+                            </div>
+                            <div class="notification-content">
+                                <div class="notification-title">Complaint Resolved</div>
+                                <div class="notification-message">
+                                    Your complaint <strong>CMP-003</strong> (Service quality complaint) has been marked as resolved. Please review the resolution and close the complaint if satisfied.
+                                </div>
+                                <div class="notification-meta">
+                                    <div class="notification-time">
+                                        <i class="bi bi-clock"></i>
+                                        1 day ago
+                                    </div>
+                                    <div class="notification-actions">
+                                        <button class="notification-action-btn" title="Mark as read">
+                                            <i class="bi bi-check"></i>
+                                        </button>
+                                        <button class="notification-action-btn" title="Delete">
+                                            <i class="bi bi-trash"></i>
+                                        </button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- Read Notification -->
+                    <div class="notification-card">
+                        <div class="notification-card-header">
+                            <div class="notification-icon complaint">
+                                <i class="bi bi-file-text"></i>
+                            </div>
+                            <div class="notification-content">
+                                <div class="notification-title">Complaint Assigned</div>
+                                <div class="notification-message">
+                                    Your complaint <strong>CMP-004</strong> (Account access problem) has been assigned to Support Team.
+                                </div>
+                                <div class="notification-meta">
+                                    <div class="notification-time">
+                                        <i class="bi bi-clock"></i>
+                                        2 days ago
+                                    </div>
+                                    <div class="notification-actions">
+                                        <button class="notification-action-btn" title="Delete">
+                                            <i class="bi bi-trash"></i>
+                                        </button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- Read Notification -->
+                    <div class="notification-card">
+                        <div class="notification-card-header">
+                            <div class="notification-icon warning">
+                                <i class="bi bi-exclamation-triangle"></i>
+                            </div>
+                            <div class="notification-content">
+                                <div class="notification-title">System Maintenance Scheduled</div>
+                                <div class="notification-message">
+                                    Scheduled system maintenance will occur on January 20, 2024, from 2:00 AM to 4:00 AM EST. The system may be temporarily unavailable during this time.
+                                </div>
+                                <div class="notification-meta">
+                                    <div class="notification-time">
+                                        <i class="bi bi-clock"></i>
+                                        3 days ago
+                                    </div>
+                                    <div class="notification-actions">
+                                        <button class="notification-action-btn" title="Delete">
+                                            <i class="bi bi-trash"></i>
+                                        </button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- Read Notification -->
+                    <div class="notification-card">
+                        <div class="notification-card-header">
+                            <div class="notification-icon info">
+                                <i class="bi bi-person-check"></i>
+                            </div>
+                            <div class="notification-content">
+                                <div class="notification-title">Profile Updated Successfully</div>
+                                <div class="notification-message">
+                                    Your profile information has been successfully updated. Your changes are now reflected across the system.
+                                </div>
+                                <div class="notification-meta">
+                                    <div class="notification-time">
+                                        <i class="bi bi-clock"></i>
+                                        5 days ago
+                                    </div>
+                                    <div class="notification-actions">
+                                        <button class="notification-action-btn" title="Delete">
+                                            <i class="bi bi-trash"></i>
+                                        </button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <!-- Toast Container -->
+    <div class="toast-container position-fixed top-0 end-0 p-3">
+        <div id="toast" class="toast" role="alert" aria-live="assertive" aria-atomic="true">
+            <div class="toast-header">
+                <i class="bi bi-bell me-2" id="toastIcon"></i>
+                <strong class="me-auto" id="toastTitle">Notification</strong>
+                <button type="button" class="btn-close" data-bs-dismiss="toast" aria-label="Close"></button>
+            </div>
+            <div class="toast-body" id="toastMessage"></div>
+        </div>
+    </div>
+    
+    <!-- Bootstrap 5 JS Bundle -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="/js/api.js"></script>
+    
+    <script>
+        // Load components and initialize
+        document.addEventListener('DOMContentLoaded', function() {
+            // Load sidebar
+            document.getElementById('sidebar-container').innerHTML = `
+                <div class="sidebar">
+                    <div class="sidebar-header">
+                        <div class="sidebar-logo">
+                            <i class="bi bi-box-seam"></i>
+                        </div>
+                        <div class="sidebar-title">SCMS</div>
+                    </div>
+                    
+                    <nav class="sidebar-nav">
+                        <a href="user-dashboard.html" class="sidebar-nav-item">
+                            <i class="bi bi-speedometer2"></i>
+                            <span>Dashboard</span>
+                        </a>
+                        <a href="complaint-create.html" class="sidebar-nav-item">
+                            <i class="bi bi-plus-circle"></i>
+                            <span>Raise Complaint</span>
+                        </a>
+                        <a href="complaint-track.html" class="sidebar-nav-item">
+                            <i class="bi bi-clock-history"></i>
+                            <span>My Complaints</span>
+                        </a>
+                        <a href="notifications.html" class="sidebar-nav-item active">
+                            <i class="bi bi-bell"></i>
+                            <span>Notifications</span>
+                            <span class="sidebar-badge">3</span>
+                        </a>
+                        <a href="profile.html" class="sidebar-nav-item">
+                            <i class="bi bi-person"></i>
+                            <span>Profile</span>
+                        </a>
+                    </nav>
+                    
+                    <div class="sidebar-footer">
+                        <a href="index.html" class="sidebar-nav-item logout">
+                            <i class="bi bi-box-arrow-right"></i>
+                            <span>Logout</span>
+                        </a>
+                    </div>
+                </div>
+            `;
+            
+            // Load navbar
+            document.getElementById('navbar-container').innerHTML = `
+                <div class="navbar">
+                    <div class="navbar-left">
+                        <button class="navbar-toggle" id="sidebarToggle">
+                            <i class="bi bi-list"></i>
+                        </button>
+                        <div class="navbar-search">
+                            <i class="bi bi-search"></i>
+                            <input type="text" placeholder="Search complaints...">
+                        </div>
+                    </div>
+                    
+                    <div class="navbar-right">
+                        <button class="navbar-icon-btn" id="themeToggle">
+                            <i class="bi bi-moon"></i>
+                        </button>
+                        <button class="navbar-icon-btn" id="notificationBtn">
+                            <i class="bi bi-bell"></i>
+                            <span class="navbar-badge">3</span>
+                        </button>
+                        <div class="navbar-user">
+                            <div class="navbar-user-avatar">
+                                <i class="bi bi-person"></i>
+                            </div>
+                            <div class="navbar-user-info">
+                                <div class="navbar-user-name">John Doe</div>
+                                <div class="navbar-user-role">User</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            `;
+            
+            // Initialize sidebar toggle
+            const sidebarToggle = document.getElementById('sidebarToggle');
+            const mainContent = document.getElementById('mainContent');
+            
+            if (sidebarToggle) {
+                sidebarToggle.addEventListener('click', function() {
+                    mainContent.classList.toggle('sidebar-collapsed');
+                });
+            }
+            
+            // Initialize theme toggle
+            const themeToggle = document.getElementById('themeToggle');
+            let isDark = false;
+            
+            if (themeToggle) {
+                themeToggle.addEventListener('click', function() {
+                    isDark = !isDark;
+                    document.body.classList.toggle('dark-theme', isDark);
+                    themeToggle.innerHTML = isDark ? '<i class="bi bi-sun"></i>' : '<i class="bi bi-moon"></i>';
+                });
+            }
+            
+            // Initialize filter tabs
+            initializeFilterTabs();
+        });
+        
+        function initializeFilterTabs() {
+            const tabs = document.querySelectorAll('.filter-tab');
+            
+            tabs.forEach(tab => {
+                tab.addEventListener('click', function() {
+                    tabs.forEach(t => t.classList.remove('active'));
+                    this.classList.add('active');
+                    
+                    // Implement filtering logic
+                    console.log('Filtering by:', this.textContent);
+                });
+            });
+        }
+        
+        function markAllAsRead() {
+            // Implement mark all as read logic
+            console.log('Marking all notifications as read');
+        }
+        
+        function clearAllNotifications() {
+            // Implement clear all logic
+            console.log('Clearing all notifications');
+        }
+    </script>
+</body>
+</html>

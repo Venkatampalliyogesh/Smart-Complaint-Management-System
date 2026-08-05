@@ -1,0 +1,662 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>User Dashboard - Smart Complaint Management System</title>
+    
+    <!-- Google Fonts - Poppins -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    
+    <!-- Bootstrap 5 CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+    
+    <!-- Bootstrap Icons -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.1/font/bootstrap-icons.css">
+    
+    <!-- Chart.js -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
+    
+    <!-- Modern CSS Framework -->
+    <link rel="stylesheet" href="/css/modern.css">
+    
+    <style>
+        .dashboard-layout {
+            display: flex;
+            min-height: 100vh;
+        }
+        
+        .main-content {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            margin-left: 260px;
+            transition: margin-left 300ms ease-in-out;
+        }
+        
+        .main-content.sidebar-collapsed {
+            margin-left: 70px;
+        }
+        
+        .content-area {
+            padding: 2rem;
+            flex: 1;
+            background: #F8FAFC;
+        }
+        
+        .page-header {
+            margin-bottom: 2rem;
+        }
+        
+        .page-header h2 {
+            font-size: 1.875rem;
+            font-weight: 600;
+            color: #1E293B;
+            margin-bottom: 0.5rem;
+        }
+        
+        .page-header p {
+            color: #64748B;
+            font-size: 0.875rem;
+        }
+        
+        .user-badge {
+            background: linear-gradient(135deg, #2563EB 0%, #1E40AF 100%);
+            color: white;
+            padding: 0.25rem 0.75rem;
+            border-radius: 0.375rem;
+            font-size: 0.75rem;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+        }
+        
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+            gap: 1.5rem;
+            margin-bottom: 2rem;
+        }
+        
+        .quick-actions {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 1rem;
+            margin-bottom: 2rem;
+        }
+        
+        .quick-action-card {
+            background: white;
+            border: 1px solid #E2E8F0;
+            border-radius: 1rem;
+            padding: 1.5rem;
+            text-align: center;
+            transition: all 0.3s ease;
+            cursor: pointer;
+            text-decoration: none;
+            color: inherit;
+        }
+        
+        .quick-action-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
+            border-color: #2563EB;
+        }
+        
+        .quick-action-icon {
+            width: 50px;
+            height: 50px;
+            border-radius: 1rem;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 0 auto 1rem;
+            font-size: 1.5rem;
+        }
+        
+        .quick-action-title {
+            font-weight: 600;
+            color: #1E293B;
+            margin-bottom: 0.25rem;
+        }
+        
+        .quick-action-description {
+            font-size: 0.875rem;
+            color: #64748B;
+        }
+        
+        .recent-complaints-table {
+            background: white;
+            border: 1px solid #E2E8F0;
+            border-radius: 1rem;
+            overflow: hidden;
+        }
+        
+        .table-header {
+            background: #F8FAFC;
+            padding: 1.5rem;
+            border-bottom: 1px solid #E2E8F0;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        
+        .table-header h3 {
+            font-size: 1.125rem;
+            font-weight: 600;
+            color: #1E293B;
+            margin: 0;
+        }
+        
+        .table-responsive {
+            margin: 0;
+        }
+        
+        .table {
+            margin: 0;
+        }
+        
+        .table thead th {
+            background: #F8FAFC;
+            font-weight: 600;
+            color: #64748B;
+            font-size: 0.875rem;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+            padding: 1rem 1.5rem;
+            border-bottom: 1px solid #E2E8F0;
+        }
+        
+        .table tbody td {
+            padding: 1rem 1.5rem;
+            border-bottom: 1px solid #E2E8F0;
+            color: #1E293B;
+            vertical-align: middle;
+        }
+        
+        .table tbody tr:hover {
+            background: #F8FAFC;
+        }
+        
+        .status-badge {
+            padding: 0.375rem 0.75rem;
+            border-radius: 1rem;
+            font-size: 0.75rem;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+        }
+        
+        .status-pending {
+            background: #FEF3C7;
+            color: #92400E;
+        }
+        
+        .status-assigned {
+            background: #DBEAFE;
+            color: #1E40AF;
+        }
+        
+        .status-in-progress {
+            background: #E0F2FE;
+            color: #075985;
+        }
+        
+        .status-resolved {
+            background: #DCFCE7;
+            color: #166534;
+        }
+        
+        .status-closed {
+            background: #F1F5F9;
+            color: #475569;
+        }
+        
+        .priority-badge {
+            padding: 0.25rem 0.5rem;
+            border-radius: 0.375rem;
+            font-size: 0.75rem;
+            font-weight: 600;
+        }
+        
+        .priority-high {
+            background: #FEE2E2;
+            color: #991B1B;
+        }
+        
+        .priority-medium {
+            background: #FEF3C7;
+            color: #92400E;
+        }
+        
+        .priority-low {
+            background: #DCFCE7;
+            color: #166534;
+        }
+        
+        .action-btn {
+            padding: 0.375rem 0.75rem;
+            border-radius: 0.375rem;
+            font-size: 0.875rem;
+            font-weight: 500;
+            transition: all 0.3s ease;
+            text-decoration: none;
+            display: inline-flex;
+            align-items: center;
+            gap: 0.25rem;
+        }
+        
+        .action-btn-primary {
+            background: #2563EB;
+            color: white;
+            border: none;
+        }
+        
+        .action-btn-primary:hover {
+            background: #1E40AF;
+            color: white;
+        }
+        
+        .action-btn-outline {
+            background: transparent;
+            color: #2563EB;
+            border: 1px solid #2563EB;
+        }
+        
+        .action-btn-outline:hover {
+            background: #2563EB;
+            color: white;
+        }
+        
+        @media (max-width: 1024px) {
+            .main-content {
+                margin-left: 0;
+            }
+        }
+        
+        @media (max-width: 768px) {
+            .content-area {
+                padding: 1rem;
+            }
+            
+            .stats-grid {
+                grid-template-columns: repeat(2, 1fr);
+            }
+            
+            .quick-actions {
+                grid-template-columns: repeat(2, 1fr);
+            }
+        }
+        
+        @media (max-width: 576px) {
+            .stats-grid {
+                grid-template-columns: 1fr;
+            }
+            
+            .quick-actions {
+                grid-template-columns: 1fr;
+            }
+            
+            .table-responsive {
+                font-size: 0.875rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="dashboard-layout">
+        <!-- Sidebar Component -->
+        <div id="sidebar-container"></div>
+        
+        <!-- Main Content -->
+        <div class="main-content" id="mainContent">
+            <!-- Navbar Component -->
+            <div id="navbar-container"></div>
+            
+            <!-- Content Area -->
+            <div class="content-area">
+                <div class="page-header">
+                    <div class="d-flex justify-content-between align-items-start">
+                        <div>
+                            <h2><i class="bi bi-speedometer2 me-2"></i>User Dashboard</h2>
+                            <p>Welcome back! Here's an overview of your complaints.</p>
+                        </div>
+                        <span class="user-badge">User Panel</span>
+                    </div>
+                </div>
+                
+                <div id="alert" class="alert"></div>
+                
+                <!-- Loading Spinner -->
+                <div id="loadingSpinner" class="text-center py-5 d-none">
+                    <div class="spinner-border text-primary" role="status">
+                        <span class="visually-hidden">Loading...</span>
+                    </div>
+                </div>
+                
+                <!-- Stats Grid -->
+                <div class="stats-grid">
+                    <div class="dashboard-card">
+                        <div class="dashboard-card-icon primary">
+                            <i class="bi bi-file-text"></i>
+                        </div>
+                        <div class="dashboard-card-value" id="totalComplaints">-</div>
+                        <div class="dashboard-card-label">Total Complaints</div>
+                    </div>
+                    
+                    <div class="dashboard-card">
+                        <div class="dashboard-card-icon warning">
+                            <i class="bi bi-hourglass-split"></i>
+                        </div>
+                        <div class="dashboard-card-value" id="pendingComplaints">-</div>
+                        <div class="dashboard-card-label">Pending</div>
+                    </div>
+                    
+                    <div class="dashboard-card">
+                        <div class="dashboard-card-icon info">
+                            <i class="bi bi-person-bag"></i>
+                        </div>
+                        <div class="dashboard-card-value" id="assignedComplaints">-</div>
+                        <div class="dashboard-card-label">Assigned</div>
+                    </div>
+                    
+                    <div class="dashboard-card">
+                        <div class="dashboard-card-icon secondary">
+                            <i class="bi bi-gear"></i>
+                        </div>
+                        <div class="dashboard-card-value" id="inProgressComplaints">-</div>
+                        <div class="dashboard-card-label">In Progress</div>
+                    </div>
+                    
+                    <div class="dashboard-card">
+                        <div class="dashboard-card-icon success">
+                            <i class="bi bi-check-circle"></i>
+                        </div>
+                        <div class="dashboard-card-value" id="resolvedComplaints">-</div>
+                        <div class="dashboard-card-label">Resolved</div>
+                    </div>
+                    
+                    <div class="dashboard-card">
+                        <div class="dashboard-card-icon dark">
+                            <i class="bi bi-x-circle"></i>
+                        </div>
+                        <div class="dashboard-card-value" id="closedComplaints">-</div>
+                        <div class="dashboard-card-label">Closed</div>
+                    </div>
+                </div>
+                
+                <!-- Quick Actions -->
+                <h4 class="mb-3" style="font-weight: 600; color: #1E293B;">Quick Actions</h4>
+                <div class="quick-actions">
+                    <a href="complaint-create.html" class="quick-action-card">
+                        <div class="quick-action-icon" style="background: linear-gradient(135deg, #2563EB 0%, #1E40AF 100%); color: white;">
+                            <i class="bi bi-plus-circle"></i>
+                        </div>
+                        <div class="quick-action-title">Raise Complaint</div>
+                        <div class="quick-action-description">Submit a new complaint</div>
+                    </a>
+                    
+                    <a href="complaint-track.html" class="quick-action-card">
+                        <div class="quick-action-icon" style="background: linear-gradient(135deg, #0891B2 0%, #06B6D4 100%); color: white;">
+                            <i class="bi bi-clock-history"></i>
+                        </div>
+                        <div class="quick-action-title">View History</div>
+                        <div class="quick-action-description">Track all complaints</div>
+                    </a>
+                    
+                    <a href="notifications.html" class="quick-action-card">
+                        <div class="quick-action-icon" style="background: linear-gradient(135deg, #F59E0B 0%, #D97706 100%); color: white;">
+                            <i class="bi bi-bell"></i>
+                        </div>
+                        <div class="quick-action-title">Notifications</div>
+                        <div class="quick-action-description">View updates</div>
+                    </a>
+                    
+                    <a href="profile.html" class="quick-action-card">
+                        <div class="quick-action-icon" style="background: linear-gradient(135deg, #16A34A 0%, #15803D 100%); color: white;">
+                            <i class="bi bi-person"></i>
+                        </div>
+                        <div class="quick-action-title">Profile</div>
+                        <div class="quick-action-description">Manage account</div>
+                    </a>
+                </div>
+                
+                <!-- Recent Complaints -->
+                <div class="recent-complaints-table">
+                    <div class="table-header">
+                        <h3><i class="bi bi-clock-history me-2"></i>Recent Complaints</h3>
+                        <a href="complaint-track.html" class="action-btn action-btn-outline">
+                            View All <i class="bi bi-arrow-right"></i>
+                        </a>
+                    </div>
+                    <div class="table-responsive">
+                        <table class="table">
+                            <thead>
+                                <tr>
+                                    <th>ID</th>
+                                    <th>Title</th>
+                                    <th>Category</th>
+                                    <th>Priority</th>
+                                    <th>Status</th>
+                                    <th>Date</th>
+                                    <th>Actions</th>
+                                </tr>
+                            </thead>
+                            <tbody id="recentComplaintsTable">
+                                <!-- Dynamic content -->
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <!-- Toast Container -->
+    <div class="toast-container position-fixed top-0 end-0 p-3">
+        <div id="toast" class="toast" role="alert" aria-live="assertive" aria-atomic="true">
+            <div class="toast-header">
+                <i class="bi bi-bell me-2" id="toastIcon"></i>
+                <strong class="me-auto" id="toastTitle">Notification</strong>
+                <button type="button" class="btn-close" data-bs-dismiss="toast" aria-label="Close"></button>
+            </div>
+            <div class="toast-body" id="toastMessage"></div>
+        </div>
+    </div>
+    
+    <!-- Bootstrap 5 JS Bundle -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="/js/ui-components.js"></script>
+    <script src="/js/api.js"></script>
+    
+    <script>
+        // Load sidebar and navbar components
+        document.getElementById('sidebar-container').innerHTML = `
+            <div class="sidebar">
+                <div class="sidebar-header">
+                    <div class="sidebar-logo">
+                        <i class="bi bi-box-seam"></i>
+                    </div>
+                    <div class="sidebar-title">SCMS</div>
+                </div>
+                
+                <nav class="sidebar-nav">
+                    <a href="user-dashboard.html" class="sidebar-nav-item active">
+                        <i class="bi bi-speedometer2"></i>
+                        <span>Dashboard</span>
+                    </a>
+                    <a href="complaint-create.html" class="sidebar-nav-item">
+                        <i class="bi bi-plus-circle"></i>
+                        <span>Raise Complaint</span>
+                    </a>
+                    <a href="complaint-track.html" class="sidebar-nav-item">
+                        <i class="bi bi-clock-history"></i>
+                        <span>My Complaints</span>
+                    </a>
+                    <a href="notifications.html" class="sidebar-nav-item">
+                        <i class="bi bi-bell"></i>
+                        <span>Notifications</span>
+                        <span class="sidebar-badge">3</span>
+                    </a>
+                    <a href="profile.html" class="sidebar-nav-item">
+                        <i class="bi bi-person"></i>
+                        <span>Profile</span>
+                    </a>
+                </nav>
+                
+                <div class="sidebar-footer">
+                    <a href="index.html" class="sidebar-nav-item logout">
+                        <i class="bi bi-box-arrow-right"></i>
+                        <span>Logout</span>
+                    </a>
+                </div>
+            </div>
+        `;
+        
+        document.getElementById('navbar-container').innerHTML = `
+            <div class="navbar">
+                <div class="navbar-left">
+                    <button class="navbar-toggle" id="sidebarToggle">
+                        <i class="bi bi-list"></i>
+                    </button>
+                    <div class="navbar-search">
+                        <i class="bi bi-search"></i>
+                        <input type="text" placeholder="Search complaints...">
+                    </div>
+                </div>
+                
+                <div class="navbar-right">
+                    <button class="navbar-icon-btn" id="themeToggle">
+                        <i class="bi bi-moon"></i>
+                    </button>
+                    <button class="navbar-icon-btn" id="notificationBtn">
+                        <i class="bi bi-bell"></i>
+                        <span class="navbar-badge">3</span>
+                    </button>
+                    <div class="navbar-user">
+                        <div class="navbar-user-avatar">
+                            <i class="bi bi-person"></i>
+                        </div>
+                        <div class="navbar-user-info">
+                            <div class="navbar-user-name">John Doe</div>
+                            <div class="navbar-user-role">User</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        `;
+        
+        // Initialize dashboard
+        document.addEventListener('DOMContentLoaded', function() {
+            loadDashboardStats();
+            loadRecentComplaints();
+            initializeSidebar();
+            initializeThemeToggle();
+        });
+        
+        function loadDashboardStats() {
+            // Simulated data - replace with actual API calls
+            const stats = {
+                totalComplaints: 24,
+                pendingComplaints: 5,
+                assignedComplaints: 8,
+                inProgressComplaints: 6,
+                resolvedComplaints: 4,
+                closedComplaints: 1
+            };
+            
+            document.getElementById('totalComplaints').textContent = stats.totalComplaints;
+            document.getElementById('pendingComplaints').textContent = stats.pendingComplaints;
+            document.getElementById('assignedComplaints').textContent = stats.assignedComplaints;
+            document.getElementById('inProgressComplaints').textContent = stats.inProgressComplaints;
+            document.getElementById('resolvedComplaints').textContent = stats.resolvedComplaints;
+            document.getElementById('closedComplaints').textContent = stats.closedComplaints;
+        }
+        
+        function loadRecentComplaints() {
+            // Simulated data - replace with actual API calls
+            const complaints = [
+                {
+                    id: 'CMP-001',
+                    title: 'Internet connectivity issue',
+                    category: 'Technical',
+                    priority: 'High',
+                    status: 'In Progress',
+                    date: '2024-01-15'
+                },
+                {
+                    id: 'CMP-002',
+                    title: 'Billing discrepancy',
+                    category: 'Billing',
+                    priority: 'Medium',
+                    status: 'Pending',
+                    date: '2024-01-14'
+                },
+                {
+                    id: 'CMP-003',
+                    title: 'Service quality complaint',
+                    category: 'Service',
+                    priority: 'Low',
+                    status: 'Resolved',
+                    date: '2024-01-13'
+                },
+                {
+                    id: 'CMP-004',
+                    title: 'Account access problem',
+                    category: 'Technical',
+                    priority: 'High',
+                    status: 'Assigned',
+                    date: '2024-01-12'
+                },
+                {
+                    id: 'CMP-005',
+                    title: 'Feature request',
+                    category: 'Enhancement',
+                    priority: 'Low',
+                    status: 'Closed',
+                    date: '2024-01-11'
+                }
+            ];
+            
+            const tableBody = document.getElementById('recentComplaintsTable');
+            tableBody.innerHTML = complaints.map(complaint => `
+                <tr>
+                    <td><strong>${complaint.id}</strong></td>
+                    <td>${complaint.title}</td>
+                    <td>${complaint.category}</td>
+                    <td><span class="priority-badge priority-${complaint.priority.toLowerCase()}">${complaint.priority}</span></td>
+                    <td><span class="status-badge status-${complaint.status.toLowerCase().replace(' ', '-')}">${complaint.status}</span></td>
+                    <td>${complaint.date}</td>
+                    <td>
+                        <a href="complaint-detail.html?id=${complaint.id}" class="action-btn action-btn-primary">
+                            <i class="bi bi-eye"></i> View
+                        </a>
+                    </td>
+                </tr>
+            `).join('');
+        }
+        
+        function initializeSidebar() {
+            const sidebarToggle = document.getElementById('sidebarToggle');
+            const mainContent = document.getElementById('mainContent');
+            
+            sidebarToggle.addEventListener('click', function() {
+                mainContent.classList.toggle('sidebar-collapsed');
+            });
+        }
+        
+        function initializeThemeToggle() {
+            const themeToggle = document.getElementById('themeToggle');
+            let isDark = false;
+            
+            themeToggle.addEventListener('click', function() {
+                isDark = !isDark;
+                document.body.classList.toggle('dark-theme', isDark);
+                themeToggle.innerHTML = isDark ? '<i class="bi bi-sun"></i>' : '<i class="bi bi-moon"></i>';
+            });
+        }
+    </script>
+</body>
+</html>

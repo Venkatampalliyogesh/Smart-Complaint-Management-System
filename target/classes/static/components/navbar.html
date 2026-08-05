@@ -1,0 +1,46 @@
+<!-- Modern Top Navbar Component -->
+<nav class="top-navbar">
+    <div class="navbar-left">
+        <button class="mobile-menu-toggle" id="mobileMenuToggle" title="Toggle Menu">
+            <i class="bi bi-list"></i>
+        </button>
+        <a href="/complaints.html" class="navbar-brand">
+            <i class="bi bi-box-seam"></i>
+            <span>SCMS</span>
+        </a>
+        <div class="search-bar">
+            <i class="bi bi-search"></i>
+            <input type="text" placeholder="Search complaints, users..." id="globalSearch">
+        </div>
+    </div>
+    
+    <div class="navbar-right">
+        <button class="notification-bell" id="notificationBell" title="Notifications">
+            <i class="bi bi-bell"></i>
+            <span class="notification-badge" id="notificationBadge">3</span>
+        </button>
+        
+        <div class="user-dropdown" id="userDropdown">
+            <button class="user-dropdown-toggle" id="userDropdownToggle">
+                <div class="user-avatar" id="userAvatar">U</div>
+                <span class="user-name" id="userName">User Name</span>
+                <i class="bi bi-chevron-down"></i>
+            </button>
+            <div class="user-dropdown-menu" id="userDropdownMenu">
+                <a href="/profile.html" class="user-dropdown-item">
+                    <i class="bi bi-person"></i>
+                    <span>Profile</span>
+                </a>
+                <a href="/complaints.html" class="user-dropdown-item">
+                    <i class="bi bi-file-text"></i>
+                    <span>My Complaints</span>
+                </a>
+                <div class="user-dropdown-divider"></div>
+                <a href="#" class="user-dropdown-item" id="logoutBtn">
+                    <i class="bi bi-box-arrow-right"></i>
+                    <span>Logout</span>
+                </a>
+            </div>
+        </div>
+    </div>
+</nav>
